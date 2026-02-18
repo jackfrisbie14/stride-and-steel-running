@@ -1,0 +1,21 @@
+{
+  "name": "Stride & Steel Running",
+  "short_name": "SS Running",
+  "description": "A personalized running program that builds speed, endurance, and consistency - whether you're chasing a PR or just getting started.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#18181B",
+  "theme_color": "#3B82F6",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

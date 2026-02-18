@@ -1,0 +1,277 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// NextAuth.js required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// App models
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Quiz data
+  quizAnswers   Json?
+  archetype     String?
+
+  // Stripe subscription
+  stripeCustomerId       String?   @unique
+  stripeSubscriptionId   String?   @unique
+  stripePriceId          String?
+  stripeCurrentPeriodEnd DateTime?
+
+  // Training preferences
+  trainingDays    Int      @default(5)
+  racePlanActive  Boolean  @default(false)
+  experience      String?  // "beginner", "intermediate", "advanced" — overrides quiz-derived value
+  raceGoalTime    String?  // e.g. "3:45:00", "1:30:00"
+
+  // Referral system
+  referredBy              String?           // Email of the user who referred them
+  referralRewardApplied   Boolean @default(false) // Whether referrer got their 50% discount
+
+  // Enjoyment prompt
+  enjoymentPromptDismissed Boolean @default(false) // User has responded/dismissed the prompt
+  firstPaidAt              DateTime?         // When first real (non-trial) subscription payment was made
+
+  // Email preferences
+  unsubscribedFromEmail    Boolean @default(false)
+
+  // Onboarding
+  tourCompleted            Boolean @default(false) // User has completed the onboarding tour
+
+  // Race goal
+  raceName     String?
+  raceDate     DateTime?
+  raceDistance String?   // "5K", "10K", "Half Marathon", "Marathon", "Other"
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  workouts      Workout[]
+  trainingWeeks TrainingWeek[]
+  racePlans     RacePlan[]
+  emailLogs     EmailLog[]
+}
+
+model Workout {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day        String   // "Monday", "Tuesday", etc.
+  type       String   // "Run", "Recovery", "CrossTrain"
+  title      String
+  exercises  Json     // Array of exercise objects
+  dayNumber  Int      @default(1)
+  source     String   @default("quiz")  // "quiz" or "race"
+  weekNumber Int      @default(1)
+  phase      String?  // "base", "build", "peak", "taper" (race only)
+  createdAt  DateTime @default(now())
+
+  @@index([userId, source])
+  @@index([userId, weekNumber])
+}
+
+model RacePlan {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  raceName     String
+  raceDate     DateTime
+  raceDistance  String
+  totalWeeks   Int
+  currentWeek  Int      @default(1)
+  phases       Json
+  isActive     Boolean  @default(true)
+  generatedAt  DateTime @default(now())
+
+  @@index([userId])
+}
+
+// Track user's current training week
+model TrainingWeek {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekNumber  Int      @default(1)
+  startDate   DateTime @default(now())
+  endDate     DateTime?
+  isComplete  Boolean  @default(false)
+
+  // Aggregated feedback from the week (used to adjust next week)
+  avgDifficulty Float?
+  avgEnergy     Float?
+  avgSoreness   Float?
+
+  workoutLogs WorkoutLog[]
+
+  @@index([userId])
+}
+
+// Individual workout completion logs with feedback
+model WorkoutLog {
+  id              String   @id @default(cuid())
+
+  // Link to training week
+  trainingWeekId  String
+  trainingWeek    TrainingWeek @relation(fields: [trainingWeekId], references: [id], onDelete: Cascade)
+
+  // Workout details
+  dayOfWeek       String   // "Monday", "Tuesday", etc.
+  workoutType     String   // "Lift", "Run", "Recovery"
+  workoutTitle    String
+
+  // Completion status
+  completed       Boolean  @default(false)
+  skipped         Boolean  @default(false)
+  completedAt     DateTime?
+
+  // Pre-workout check-in (how are you feeling?)
+  preEnergyLevel  Int?     // 1-5: How energetic do you feel?
+  preSoreness     Int?     // 1-5: How sore are you?
+  preMotivation   Int?     // 1-5: How motivated are you?
+
+  // Post-workout feedback
+  difficulty      Int?     // 1-5: How hard was this workout?
+  performance     Int?     // 1-5: How well did you perform?
+  enjoyment       Int?     // 1-5: How much did you enjoy it?
+
+  // Optional notes
+  notes           String?
+
+  // Exercise tracking (weights, reps for lifting workouts)
+  exerciseLogs    Json?    // Array of { exerciseName, sets: [{ weight, reps, completed }] }
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([trainingWeekId])
+}
+
+// Analytics - Page views and funnel tracking
+model PageView {
+  id        String   @id @default(cuid())
+  path      String   // "/", "/quiz", "/checkout", etc.
+  visitorId String   // Anonymous visitor ID from cookie
+  userId    String?  // User ID if logged in
+  referrer  String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([path])
+  @@index([visitorId])
+  @@index([createdAt])
+}
+
+model FunnelEvent {
+  id        String   @id @default(cuid())
+  step      String   // "landing", "quiz_start", "quiz_complete", "signup", "checkout", "subscribed"
+  visitorId String
+  userId    String?
+  metadata  Json?    // Additional data like quiz answers, etc.
+  createdAt DateTime @default(now())
+
+  @@index([step])
+  @@index([visitorId])
+  @@index([createdAt])
+}
+
+// Cancellation feedback (for win-back analysis)
+model CancellationFeedback {
+  id              String   @id @default(cuid())
+  userId          String
+  reason          String   // "too_expensive", "not_using", "found_alternative", "too_difficult", "not_seeing_results", "other"
+  otherReason     String?  // Free text if "other" selected
+  acceptedOffer   Boolean  @default(false) // Did they accept the return offer?
+  offerDiscount   Int?     // Discount percentage offered (e.g., 50)
+  cancelled       Boolean  @default(false) // Did they actually cancel?
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([reason])
+  @@index([createdAt])
+}
+
+// Refund requests
+model RefundRequest {
+  id              String   @id @default(cuid())
+  userId          String
+  status          String   @default("pending") // "pending", "approved", "denied", "processed"
+
+  // Eligibility data at time of request
+  purchaseDate    DateTime
+  workoutDaysCompleted Int
+  eligible        Boolean
+  eligibilityReason String?
+
+  // Refund details
+  amountCents     Int?
+  stripeRefundId  String?
+
+  // Admin
+  reviewedBy      String?
+  reviewedAt      DateTime?
+  denialReason    String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+// Email drip campaign tracking
+model EmailLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailType String   // "drip_1hr", "drip_24hr", "drip_72hr"
+  sentAt    DateTime @default(now())
+
+  @@unique([userId, emailType])
+  @@index([userId])
+}
