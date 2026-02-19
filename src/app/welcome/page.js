@@ -1,5 +1,6 @@
 import Link from "next/link";
 import HeroCarousel from "@/components/HeroCarousel";
+import SampleWeekPreview from "@/components/SampleWeekPreview";
 
 export default function Home() {
   return (
@@ -130,31 +131,7 @@ export default function Home() {
             Sample plan for a 5-day runner training for a half marathon
           </p>
 
-          <div className="space-y-3">
-            {[
-              { day: "Monday", type: "Speed", title: "Interval Run", desc: "6x800m at 5K pace with 400m recovery jog", color: "text-red-400", bg: "bg-red-500/10" },
-              { day: "Tuesday", type: "Easy", title: "Easy Run", desc: "40 min at conversational pace", color: "text-green-400", bg: "bg-green-500/10" },
-              { day: "Wednesday", type: "Speed", title: "Tempo Run", desc: "20 min warm-up, 20 min at threshold, 10 min cool-down", color: "text-red-400", bg: "bg-red-500/10" },
-              { day: "Thursday", type: "Recovery", title: "Yoga for Runners", desc: "Hip openers, hamstring stretches, foam rolling", color: "text-blue-400", bg: "bg-blue-500/10" },
-              { day: "Saturday", type: "Easy", title: "Long Run", desc: "90 min at easy pace, last 10 min at marathon pace", color: "text-green-400", bg: "bg-green-500/10" },
-            ].map((w, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-4 rounded-xl border border-zinc-800 bg-zinc-800/30 p-4"
-              >
-                <div className="w-20 flex-shrink-0">
-                  <p className="text-xs text-zinc-500">{w.day}</p>
-                  <span className={`text-xs font-medium ${w.color} ${w.bg} px-2 py-0.5 rounded-full`}>
-                    {w.type}
-                  </span>
-                </div>
-                <div className="min-w-0">
-                  <p className="font-semibold text-sm">{w.title}</p>
-                  <p className="text-xs text-zinc-500 truncate">{w.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <SampleWeekPreview />
 
           <p className="text-center mt-6 text-xs text-zinc-600">
             Your plan will be different — tailored to your archetype, experience, and goals.
