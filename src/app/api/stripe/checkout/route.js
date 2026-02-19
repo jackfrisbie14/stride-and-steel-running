@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { stripe, PRICE_ID, TRIAL_PRICE_ID } from "@/lib/stripe";
+import { stripe, PRICE_ID } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { sendFBEvent } from "@/lib/facebook";
 
@@ -86,21 +86,13 @@ export async function POST(request) {
       });
     }
 
-    // Create checkout session with $0.99 trial fee + 7-day free trial on subscription
+    // Create checkout session with free 7-day trial (auth charge only)
     const lineItems = [
       {
         price: PRICE_ID,
         quantity: 1,
       },
     ];
-
-    // Add $0.99 one-time trial fee if configured
-    if (TRIAL_PRICE_ID) {
-      lineItems.push({
-        price: TRIAL_PRICE_ID,
-        quantity: 1,
-      });
-    }
 
     // Build subscription_data
     const subscriptionData = {

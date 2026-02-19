@@ -79,9 +79,9 @@ function PricingContent() {
             <p className="mt-2 text-zinc-400">Full access to all features</p>
 
             <div className="mt-6">
-              <span className="text-5xl font-bold">$0.99</span>
+              <span className="text-5xl font-bold">FREE</span>
             </div>
-            <p className="text-lg text-blue-400 font-medium mt-2">for your first 7 days</p>
+            <p className="text-lg text-blue-400 font-medium mt-2">7-day trial</p>
             {referralCode ? (
               <p className="text-green-400 text-sm mt-1 font-medium">then $14.99 for your first month, $29.99/month after</p>
             ) : (
@@ -126,11 +126,11 @@ function PricingContent() {
               disabled={loading}
               className="mt-8 w-full rounded-xl bg-blue-500 py-4 font-semibold text-white transition-colors hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Loading..." : "Start 7-Day Trial for $0.99"}
+              {loading ? "Loading..." : "Start Free 7-Day Trial"}
             </button>
 
             <p className="mt-4 text-xs text-zinc-500">
-              $0.99 charged today. After 7 days, $29.99/month. Cancel anytime.
+              Free for 7 days. Then $29.99/month. Cancel anytime.
             </p>
           </div>
         </div>

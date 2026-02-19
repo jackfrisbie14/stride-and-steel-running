@@ -33,7 +33,7 @@ export default function Home() {
               </div>
 
               <p className="mt-6 text-sm text-zinc-500">
-                Free · 60 seconds · No credit card required
+                Free 7-day trial · 60 second quiz · Cancel anytime
               </p>
             </div>
 
@@ -193,12 +193,12 @@ export default function Home() {
       <section className="bg-zinc-900 px-6 py-20">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold sm:text-4xl">
-            Your First Plan is Free
+            Start Your Free 7-Day Trial
           </h2>
 
           <p className="mt-4 text-zinc-400">
-            See your runner archetype and get a sample training week.
-            No credit card. No commitment. Just a better way to run.
+            See your runner archetype and get a personalized training week.
+            Free for 7 days. Cancel anytime. Just a better way to run.
           </p>
 
           <Link
@@ -213,7 +213,7 @@ export default function Home() {
             <span className="h-3 w-px bg-zinc-700" />
             <span>Personalized results</span>
             <span className="h-3 w-px bg-zinc-700" />
-            <span>No credit card</span>
+            <span>Free 7-day trial</span>
           </div>
         </div>
       </section>

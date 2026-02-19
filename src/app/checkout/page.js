@@ -97,7 +97,7 @@ function CheckoutContent() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
       <div className="h-12 w-12 animate-spin rounded-full border-4 border-zinc-700 border-t-blue-500" />
-      <p className="mt-6 text-zinc-400">Setting up your $0.99 trial...</p>
+      <p className="mt-6 text-zinc-400">Setting up your free trial...</p>
     </main>
   );
 }

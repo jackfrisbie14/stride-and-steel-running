@@ -72,7 +72,7 @@ const templates = {
          We just built you a personalized training plan based on your <strong style="color:#3b82f6;">${user.archetype || "Runner"}</strong> profile. It's sitting in your dashboard right now — workouts tailored to your goals, your schedule, and your experience level.
        </p>
        <p style="color:#d4d4d8;font-size:15px;line-height:1.6;margin:0 0 16px;">
-         Try everything for <strong style="color:#ffffff;">just $0.99</strong> for your first 7 days. No commitment — cancel anytime.
+         Try everything free for 7 days. No commitment — cancel anytime.
        </p>
        ${ctaButton("Start Your 7-Day Trial →", PRICING_URL)}`,
       user.id
@@ -112,9 +112,9 @@ const templates = {
          Your <strong style="color:#3b82f6;">${user.archetype || "Runner"}</strong> plan provides a complete running system personalized to your goals — speed work, easy runs, recovery, and race prep all in one.
        </p>
        <p style="color:#d4d4d8;font-size:15px;line-height:1.6;margin:0 0 16px;">
-         Try it for <strong style="color:#ffffff;">$0.99</strong>. See the difference in one week.
+         Try it free for 7 days. See the difference in one week.
        </p>
-       ${ctaButton("Try It for $0.99 →", PRICING_URL)}`,
+       ${ctaButton("Start Your Free Trial →", PRICING_URL)}`,
       user.id
     ),
   }),
@@ -130,9 +130,9 @@ const templates = {
          Right now, it's sitting in your dashboard unused. Every day without proper programming is a day of wasted potential — or worse, a day closer to injury from random workouts.
        </p>
        <p style="color:#d4d4d8;font-size:15px;line-height:1.6;margin:0 0 16px;">
-         This is your last reminder. <strong style="color:#ffffff;">$0.99 for 7 days</strong> — less than a cup of coffee to see if structured training actually works for you.
+         This is your last reminder. <strong style="color:#ffffff;">Free for 7 days</strong> — nothing to lose to see if structured training actually works for you.
        </p>
-       ${ctaButton("Claim Your Plan for $0.99 →", PRICING_URL)}`,
+       ${ctaButton("Start Your Free Trial →", PRICING_URL)}`,
       user.id
     ),
   }),

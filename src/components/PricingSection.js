@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const MONTHLY_PRICE = 29.99;
-const TRIAL_PRICE = 0.99;
 const TRIAL_DAYS = 7;
 
 function TermsModal({ onClose }) {
@@ -132,7 +131,7 @@ function TermsModal({ onClose }) {
           {/* Section 4 */}
           <h3 className="text-white font-bold text-base pt-4 border-t border-zinc-800">4. SUBSCRIPTION TERMS</h3>
           <ul className="list-disc pl-5 space-y-2">
-            <li>Your subscription begins with a {TRIAL_DAYS}-day trial period for ${TRIAL_PRICE}. After the trial period, your subscription will automatically renew at ${MONTHLY_PRICE}/month unless you cancel before the trial ends.</li>
+            <li>Your subscription begins with a free {TRIAL_DAYS}-day trial period. A temporary authorization hold may appear on your card to verify your payment method. After the trial period, your subscription will automatically renew at ${MONTHLY_PRICE}/month unless you cancel before the trial ends.</li>
             <li>Subsequent renewals will be charged at the standard subscription rate of ${MONTHLY_PRICE}/month.</li>
             <li>You may cancel your subscription at any time through your account Settings or by contacting support. Cancellation will take effect at the end of your current billing period.</li>
             <li>No refunds or credits will be provided for partial billing periods upon cancellation.</li>
@@ -166,9 +165,9 @@ export default function PricingSection() {
           {/* Trial Price */}
           <div className="text-center mb-6">
             <div className="flex items-center justify-center gap-2">
-              <span className="text-5xl font-bold text-white">${TRIAL_PRICE}</span>
+              <span className="text-5xl font-bold text-white">FREE</span>
             </div>
-            <p className="text-lg text-blue-400 font-medium mt-2">for your first {TRIAL_DAYS} days</p>
+            <p className="text-lg text-blue-400 font-medium mt-2">{TRIAL_DAYS}-day trial</p>
             <p className="text-zinc-500 text-sm mt-2">then ${MONTHLY_PRICE}/month</p>
           </div>
 
@@ -201,12 +200,12 @@ export default function PricingSection() {
             href="/checkout"
             className="block w-full rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-4 text-center text-lg font-bold text-white transition-all hover:from-blue-600 hover:to-blue-700 hover:scale-[1.02] shadow-lg shadow-blue-500/25"
           >
-            Start 7-Day Trial for $0.99 →
+            Start Free 7-Day Trial →
           </Link>
 
           {/* Auto-renewal disclaimer */}
           <p className="mt-4 text-xs text-zinc-500 text-center leading-relaxed">
-            By continuing, you agree to pay ${TRIAL_PRICE} today for a {TRIAL_DAYS}-day trial. After the trial, your subscription will auto-renew at ${MONTHLY_PRICE} USD/month unless you cancel in Settings. Please see our{" "}
+            By continuing, you agree to start a free {TRIAL_DAYS}-day trial. A temporary authorization hold may appear on your card. After the trial, your subscription will auto-renew at ${MONTHLY_PRICE} USD/month unless you cancel in Settings. Please see our{" "}
             <button onClick={() => setShowTerms(true)} className="text-zinc-400 underline hover:text-zinc-300">
               Subscription terms
             </button>
